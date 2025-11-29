@@ -397,7 +397,7 @@ export default class ActiveEffectsSD {
 			case "edit":
 				return effect.sheet.render(true);
 			case "delete":
-				return renderTemplate(
+				return foundry.applications.handlebars.renderTemplate(
 					"systems/shadowdark/templates/dialog/are-you-sure.hbs"
 				).then(html => {
 					new Dialog({

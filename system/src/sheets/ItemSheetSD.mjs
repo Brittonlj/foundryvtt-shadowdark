@@ -727,7 +727,7 @@ export default class ItemSheetSD extends foundry.appv1.sheets.ItemSheet {
 
 	/** @inheritdoc */
 	async _onDrop(event) {
-		const data = TextEditor.getDragEventData(event);
+		const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
 
 		switch (data.type) {
 			case "Item":
