@@ -80,7 +80,7 @@ export default class ActorSheetSD extends foundry.appv1.sheets.ActorSheet {
 			this.actor.allApplicableEffects()
 		);
 
-		context.notesHTML = await TextEditor.enrichHTML(
+		context.notesHTML = await foundry.applications.ux.TextEditor.implementation.enrichHTML(
 			context.system.notes,
 			{
 				secrets: this.actor.isOwner,

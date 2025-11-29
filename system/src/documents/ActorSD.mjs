@@ -86,14 +86,15 @@ export default class ActorSD extends foundry.documents.Actor {
 				CONFIG.SHADOWDARK.RANGES[s])).join("/"),
 		};
 
-		attackOptions.numAttacks = await TextEditor.enrichHTML(
-			item.system.attack.num,
-			{
-				async: true,
-			}
-		);
+		attackOptions.numAttacks =
+			await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+				item.system.attack.num,
+				{
+					async: true,
+				}
+			);
 
-		return await renderTemplate(
+		return await foundry.applications.handlebars.renderTemplate(
 			"systems/shadowdark/templates/_partials/npc-attack.hbs",
 			attackOptions
 		);
@@ -102,12 +103,13 @@ export default class ActorSD extends foundry.documents.Actor {
 	async buildNpcSpecialDisplays(itemId) {
 		const item = this.getEmbeddedDocument("Item", itemId);
 
-		const description = await TextEditor.enrichHTML(
-			jQuery(item.system.description).text(),
-			{
-				async: true,
-			}
-		);
+		const description =
+			await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+				jQuery(item.system.description).text(),
+				{
+					async: true,
+				}
+			);
 
 		const attackOptions = {
 			attackName: item.name,
@@ -119,14 +121,15 @@ export default class ActorSD extends foundry.documents.Actor {
 			description,
 		};
 
-		attackOptions.numAttacks = await TextEditor.enrichHTML(
-			item.system.attack.num,
-			{
-				async: true,
-			}
-		);
+		attackOptions.numAttacks =
+			await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+				item.system.attack.num,
+				{
+					async: true,
+				}
+			);
 
-		return await renderTemplate(
+		return await foundry.applications.handlebars.renderTemplate(
 			"systems/shadowdark/templates/_partials/npc-special-attack.hbs",
 			attackOptions
 		);
@@ -246,7 +249,7 @@ export default class ActorSD extends foundry.documents.Actor {
 		);
 
 		if (!correctSpellClass) {
-			renderTemplate(
+			foundry.applications.handlebars.renderTemplate(
 				"systems/shadowdark/templates/dialog/confirm-learn-spell.hbs",
 				{
 					name: item.name,
@@ -368,14 +371,15 @@ export default class ActorSD extends foundry.documents.Actor {
 			}
 		}
 
-		const abilityDescription = await TextEditor.enrichHTML(
-			item.system.description,
-			{
-				secrets: this.isOwner,
-				async: true,
-				relativeTo: this,
-			}
-		);
+		const abilityDescription =
+			await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+				item.system.description,
+				{
+					secrets: this.isOwner,
+					async: true,
+					relativeTo: this,
+				}
+			);
 
 		return shadowdark.chat.renderUseAbilityMessage(this.actor, {
 			flavor: game.i18n.localize("SHADOWDARK.chat.use_ability.title"),
@@ -393,7 +397,7 @@ export default class ActorSD extends foundry.documents.Actor {
 	async usePotion(itemId) {
 		const item = this.items.get(itemId);
 
-		renderTemplate(
+		foundry.applications.handlebars.renderTemplate(
 			"systems/shadowdark/templates/dialog/confirm-use-potion.hbs",
 			{name: item.name}
 		).then(html => {
@@ -422,7 +426,9 @@ export default class ActorSD extends foundry.documents.Actor {
 
 							let template = "systems/shadowdark/templates/chat/potion-used.hbs";
 
-							const content = await renderTemplate(template, cardData);
+							const content = await foundry.applications.handlebars.renderTemplate(
+								template,
+								cardData);
 
 							await ChatMessage.create({
 								content,
@@ -465,7 +471,7 @@ export default class ActorSD extends foundry.documents.Actor {
 
 		let template = "systems/shadowdark/templates/chat/lightsource-toggle-gm.hbs";
 
-		const content = await renderTemplate(template, cardData);
+		const content = await foundry.applications.handlebars.renderTemplate(template, cardData);
 
 		await ChatMessage.create({
 			content,
@@ -493,7 +499,7 @@ export default class ActorSD extends foundry.documents.Actor {
 
 		let template = "systems/shadowdark/templates/chat/lightsource-toggle-gm.hbs";
 
-		const content = await renderTemplate(template, cardData);
+		const content = await foundry.applications.handlebars.renderTemplate(template, cardData);
 
 		await ChatMessage.create({
 			content,

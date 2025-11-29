@@ -475,7 +475,7 @@ export default class CharacterGeneratorSD extends foundry.appv1.api.FormApplicat
 
 
 	async _formatDescription(text) {
-		return await TextEditor.enrichHTML(
+		return await foundry.applications.ux.TextEditor.implementation.enrichHTML(
 			jQuery(text.replace(/<p><\/p>/g, " ")).text(),
 			{
 				async: false,

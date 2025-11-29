@@ -19,7 +19,7 @@ export default class ActiveEffectsSD {
 			parameter.uuid = foundry.utils.randomID();
 		}
 
-		const content = await renderTemplate(
+		const content = await foundry.applications.handlebars.renderTemplate(
 			"systems/shadowdark/templates/dialog/effect-list-choice.hbs",
 			{
 				effectParameters: parameters,
