@@ -908,7 +908,10 @@ export default class CharacterGeneratorSD extends foundry.appv1.api.FormApplicat
 		const table = await fromUuid(this.ancestry.system.nameTable);
 		if (table) {
 			const result = await table.draw({displayChat: false});
-			this.formData.actor.name = result.results[0].text;
+			// Remove HTML from description if no name
+			this.formData.actor.name = (result.results[0].name)
+				? result.results[0].name
+				: result.results[0].text.replace(/<[^>]+>/g, "");
 		}
 		else {
 			this.formData.actor.name = `Unnamed ${this.ancestry.name}`;
