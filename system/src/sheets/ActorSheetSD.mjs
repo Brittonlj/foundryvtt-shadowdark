@@ -285,16 +285,16 @@ export default class ActorSheetSD extends foundry.appv1.sheets.ActorSheet {
 		let ability = $(event.currentTarget).data("ability");
 		if (!ability) return;
 		// skip roll prompt if shift clicked
-		const skipPrompt = event.shiftKey ? true : false;
-		this.actor.system.rollAbilityCheck(ability, {skipPrompt});
+
+		const options = this.actor.system.buildOptionsForSkipPrompt(event);
+		this.actor.system.rollAbilityCheck(ability, options);
 	}
 
 	async _onRollAttack(event) {
 		event.preventDefault();
 		const itemId = event.currentTarget.dataset.itemId;
-		const data = {
-			skipPrompt: event.shiftKey, // skip roll prompt if shift clicked
-		};
+		const data = this.actor.system.buildOptionsForSkipPrompt(event);
+
 		if (event.currentTarget.dataset.attackType) {
 			data.attack = {Type: event.currentTarget.dataset.attackType};
 		}

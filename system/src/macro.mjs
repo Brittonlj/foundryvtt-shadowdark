@@ -48,7 +48,6 @@ export default class ShadowdarkMacro {
 
 	static async rollItemMacro(itemName) {
 		const speaker = ChatMessage.getSpeaker();
-		const options = {skipPrompt: event.shiftKey};
 
 		// Active actor, or inactive actor + token on scene allowed
 		if (!(speaker.actor && speaker.scene)) {
@@ -59,6 +58,8 @@ export default class ShadowdarkMacro {
 
 		// get actor using macro
 		let actor = game.actors.get(speaker.actor);
+
+		const options = actor.system.buildOptionsForSkipPrompt(event);
 
 		// Get items matching name on the macro
 		const items = actor ? actor.items.filter( x => x.name === itemName) : [];
@@ -119,7 +120,7 @@ export default class ShadowdarkMacro {
 					})
 				);
 			}
-			actor.castSpell(items[0]._id, options);
+			actor.system.castSpell(items[0]._id, options);
 		}
 
 		// Use class ability
@@ -140,7 +141,7 @@ export default class ShadowdarkMacro {
 
 			if (item.system.isVersatile) options.handedness = "1h";
 
-			actor.rollAttack(items[0]._id, options);
+			actor.system.rollAttack(items[0]._id, options);
 		}
 
 		else if (items[0].type === "Potion") {

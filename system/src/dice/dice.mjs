@@ -45,7 +45,7 @@ export function addStandardFormGroups(config) {
 export function applyAdvantage(formula, adv) {
 	return formula.replace(/^(\d*)d(\d+)/, function(match, dice, sides) {
 		if (sides) {
-			if (adv > 0) return `2d${sides}kh`;
+			if (adv >= 0) return `2d${sides}kh`;
 			if (adv < 0) return `2d${sides}kl`;
 		}
 		return match;
@@ -81,7 +81,7 @@ export function createToolTip(name, value, prefix="+") {
 
 export function formatBonus(bonus) {
 	if (typeof bonus === "number") {
-		if (bonus > 0) return ` +${bonus}`;
+		if (bonus >= 0) return ` +${bonus}`;
 		if (bonus < 0) return ` ${bonus}`;
 	}
 	return bonus;

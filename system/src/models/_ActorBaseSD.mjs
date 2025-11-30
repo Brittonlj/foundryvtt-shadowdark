@@ -287,4 +287,21 @@ export class ActorBaseSD extends foundry.abstract.TypeDataModel {
 		return await shadowdark.dice.rollFromConfig(config);
 	}
 
+	buildOptionsForSkipPrompt(event, options = {}) {
+		options = foundry.utils.mergeObject(options, {
+			skipPrompt: event.shiftKey || event.altKey || event.ctrlKey ? true : false,
+			advantage: 0,
+		});
+
+		if (event.altKey) {
+			options.advantage = 1;
+		}
+		else if (event.ctrlKey) {
+			options.advantage = -1;
+		}
+
+		console.log(options);
+
+		return options;
+	}
 }
