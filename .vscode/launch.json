@@ -8,7 +8,7 @@
 			"type": "chrome",
 			"request": "launch",
 			"name": "Shadowdark System",
-			"url": "http://localhost:31003",
+			"url": "http://localhost:30000",
 			"webRoot": "${workspaceFolder}/system"
 		}
 	]
