@@ -9,10 +9,19 @@
 - [#1072] Fixed issues with weapon damage bonus and weapon attack bonuses not working
 - [#1111] Fixed HUD on dropped torches, fixed issues with picking up torches.
 - [#1122] Fixed error when adding new blank Active Effects
+- [#1127] Chat card text when a targetted attack roll is made should use the Token's name, not the Actor's
 - [#1128] Fixed issue with negative strength modifiers not working on melee attacks.
+- [#1130] Alarm spell has repeated description
 - [#1146] Fixed issue with torch time displaying in chat when configured not to.
 - [#1161] Fixed issue where monsters with dark adapted trait can't see in dark.
 - [#1172] Fixed random name display on character generator after editing rollable tables.
+- [#1184] Revert journal title CSS colour change so titles are readable again
+
+## Chores
+- [#1113] Merge Portuguese (Brazilian), Russian and Spanish translation updates from Crowdin
+- [#1183] Take new snapshot of comendium data
+- [#1185] Remove deprecated label parameter from active effects manager
+- [#1186] Update node packages used for build.
 
 ---
 
@@ -99,7 +108,7 @@
 - [#1056] Non-weapon rolls broken
 
 ## Chores
-- [#1054] Merge French and Portuguese, Brazilian translation updates from Crowdin
+- [#1054] Merge French and Portuguese (Brazilian) translation updates from Crowdin
 - [#1055] Merge French translation updates from Crowdin
 
 ---
