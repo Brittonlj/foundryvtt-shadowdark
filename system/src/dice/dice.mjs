@@ -119,26 +119,25 @@ export function resolveFormula(formula, rollData={}, forceDeterministic=false) {
 /**
  * // Wrapper function for creating a roll using shadowdark specific options.
  * // Requires options.formula
- * @param {Object} options shdowdark specific options for describing a single roll
+ * @param {Object} config shdowdark specific options for describing a single roll
  * @param {Object} rolldata data used to parse attributes included in roll formulas
  * @returns {RollSD}
  */
-export async function roll(options, rolldata={}) {
-	if ( !options?.formula) throw new Error("Missing required property: config.formula");
+export async function roll(config, rolldata={}) {
+	if ( !config?.formula) throw new Error("Missing required property: config.formula");
 
 	// apply advantage or disadvantage
-	if (options.advantage) {
-		options.formula = applyAdvantage(options.formula, options.advantage);
+	if (config.advantage) {
+		config.formula = applyAdvantage(config.formula, config.advantage);
 	}
 
-	if (options.type === "damage") {
+	if (config.type === "damage") {
 		// apply momentum mode
 		if (game.settings.get("shadowdark", "useMomentumMode")) {
-			options.formula = applyExploding(options.formula);
+			config.formula = applyExploding(config.formula);
 		}
 	}
-
-	return await new shadowdark.dice.RollSD(options.formula, rolldata, options).evaluate();
+	return await new shadowdark.dice.RollSD(config.formula, rolldata, config).evaluate();
 }
 
 export async function rollDamageFromMessage(msg) {
@@ -147,7 +146,6 @@ export async function rollDamageFromMessage(msg) {
 	if (!config.damageRoll?.formula || msg.getRoll("damage")) return false;
 	const actor = game.actors.get(config.actorId);
 	if (!actor) return; // TODO Error message
-
 	config.damageRoll.type = "damage";
 	const damageRoll = await roll(config.damageRoll, actor.getRollData());
 	config.damageRoll.html = await damageRoll.render();
@@ -168,10 +166,14 @@ export async function rollDamageFromMessage(msg) {
 
 	// update message with new roll and content
 	await msg.update({rolls: [...msg.rolls, damageRoll]});
-	game.dice3d.waitFor3DAnimationByMessageID(msg.id).then(() =>
-		msg.update({content})
-	);
-
+	if (game.dice3d && !damageRoll.isDeterministic) {
+		game.dice3d.waitFor3DAnimationByMessageID(msg.id).then(() =>
+			msg.update({content})
+		);
+	}
+	else {
+		msg.update({content});
+	}
 }
 
 /**
@@ -273,46 +275,21 @@ export async function rollFromConfig(config) {
 	}
 
 	// evaluate main roll
+	const rolls = [];
 	config.mainRoll.type = "main";
 	const mainRoll = await roll(config.mainRoll, actor.getRollData());
+	rolls.push(mainRoll);
 
 	if (mainRoll.success && config?.damageRoll?.formula) {
 		// await rollDamageFromMessage(message);
 		config.damageRoll.needed = true;
 	}
 
-	// generate template data
-	const template = "systems/shadowdark/templates/chat/roll-card.hbs";
-	const templateData = {...config};
-	templateData.actor = actor;
-	templateData.mainRoll.html = await mainRoll.render();
-	if (config.itemUuid) {
-		templateData.item = await fromUuid(config.itemUuid);
-	}
-	if (config.targetUuid) {
-		templateData.target = await fromUuid(config.targetUuid);
-	}
-	const content = await foundry.applications.handlebars.renderTemplate(template, templateData);
+	// render roll
+	const chatData = await shadowdark.chat.renderRollMessage(config, rolls);
+	const msg = await ChatMessage.create(chatData);
 
-	// Create Chat Message
-	const chatData = {
-		content,
-		flags: {
-			"core.canPopout": true,
-			"shadowdark.rollConfig": config,
-		},
-		flavor: config.title ?? undefined,
-		speaker: ChatMessage.getSpeaker({
-			actor,
-		}),
-		rolls: [mainRoll],
-		user: game.user.id,
-	};
-	if (config.rollMode) {
-		ChatMessage.applyRollMode(chatData, config.rollMode);
-	}
-
-	await ChatMessage.create(chatData);
+	if (game.settings.get("shadowdark", "rollDamage") && config?.damageRoll?.needed) rollDamageFromMessage(msg);
 
 	return mainRoll;
 }
@@ -330,4 +307,16 @@ export function setRollTarget(config={}) {
 			config.mainRoll.dc ??= targetAC;
 		}
 	}
+}
+
+export function upgradeDie(die, modifier=0) {
+	const shadowdarkDice = Object.values(CONFIG.SHADOWDARK.WEAPON_BASE_DAMAGE_DIE_ONLY);
+	let index = shadowdarkDice.indexOf(die);
+	// make sure die is on the list
+	if (index === -1) return die;
+
+	let newIndex = index + modifier;
+	newIndex = Math.max(0, Math.min(shadowdarkDice.length - 1, newIndex));
+
+	return shadowdarkDice[newIndex];
 }

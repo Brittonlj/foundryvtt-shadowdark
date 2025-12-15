@@ -387,7 +387,7 @@ export default class PlayerSheetSD extends ActorSheetSD {
 	async _onAbilityUsesDecrement(event) {
 		event.preventDefault();
 
-		const itemId = $(event.currentTarget).data("item-id");
+		const itemId = event.currentTarget.dataset.itemId;
 		const item = this.actor.getEmbeddedDocument("Item", itemId);
 
 		if (item.system.uses.available > 0) {
@@ -403,7 +403,7 @@ export default class PlayerSheetSD extends ActorSheetSD {
 	async _onAbilityUsesIncrement(event) {
 		event.preventDefault();
 
-		const itemId = $(event.currentTarget).data("item-id");
+		const itemId = event.currentTarget.dataset.itemId;
 		const item = this.actor.getEmbeddedDocument("Item", itemId);
 
 		if (item.system.uses.available < item.system.uses.max) {
@@ -512,7 +512,7 @@ export default class PlayerSheetSD extends ActorSheetSD {
 	async _onItemQuantityDecrement(event) {
 		event.preventDefault();
 
-		const itemId = $(event.currentTarget).data("item-id");
+		const itemId = event.currentTarget.dataset.itemId;
 		const item = this.actor.getEmbeddedDocument("Item", itemId);
 
 		if (item.system.quantity > 0) {
@@ -528,7 +528,7 @@ export default class PlayerSheetSD extends ActorSheetSD {
 	async _onItemQuantityIncrement(event) {
 		event.preventDefault();
 
-		const itemId = $(event.currentTarget).data("item-id");
+		const itemId = event.currentTarget.dataset.itemId;
 		const item = this.actor.getEmbeddedDocument("Item", itemId);
 
 		if (item.system.quantity < item.system.slots.per_slot) {
@@ -554,20 +554,20 @@ export default class PlayerSheetSD extends ActorSheetSD {
 	async _onCastSpell(event) {
 		event.preventDefault();
 
-		const itemId = event.currentTarget.dataset.uuid;
+		const itemUuid = event.currentTarget.dataset.itemUuid;
 
 		if (event.shiftKey) {
-			this.actor.system.castSpell(itemId, {skipPrompt: true});
+			this.actor.system.castSpell(itemUuid, {skipPrompt: true});
 		}
 		else {
-			this.actor.system.castSpell(itemId);
+			this.actor.system.castSpell(itemUuid);
 		}
 	}
 
 	async _onLearnSpell(event) {
 		event.preventDefault();
 
-		const itemId = $(event.currentTarget).data("item-id");
+		const itemId = event.currentTarget.dataset.itemId;
 
 		this.actor.system.learnSpell(itemId);
 	}
@@ -599,7 +599,7 @@ export default class PlayerSheetSD extends ActorSheetSD {
 	_onSellTreasure(event) {
 		event.preventDefault();
 
-		const itemId = $(event.currentTarget).data("item-id");
+		const itemId = event.currentTarget.dataset.itemId;
 		const itemData = this.object.getEmbeddedDocument("Item", itemId);
 
 		renderTemplate(
@@ -630,7 +630,7 @@ export default class PlayerSheetSD extends ActorSheetSD {
 	async _onToggleEquipped(event) {
 		event.preventDefault();
 
-		const itemId = $(event.currentTarget).data("item-id");
+		const itemId = event.currentTarget.dataset.itemId;
 		const item = this.actor.getEmbeddedDocument("Item", itemId);
 
 		await this.actor.updateEmbeddedDocuments("Item", [
@@ -646,7 +646,7 @@ export default class PlayerSheetSD extends ActorSheetSD {
 	async _onToggleStashed(event) {
 		event.preventDefault();
 
-		const itemId = $(event.currentTarget).data("item-id");
+		const itemId = event.currentTarget.dataset.itemId;
 		const item = this.actor.getEmbeddedDocument("Item", itemId);
 
 		await this.actor.updateEmbeddedDocuments("Item", [
@@ -661,19 +661,19 @@ export default class PlayerSheetSD extends ActorSheetSD {
 	async _onUseAbility(event) {
 		event.preventDefault();
 
-		const itemId = $(event.currentTarget).data("item-id");
+		const itemUuid = event.currentTarget.dataset.itemUuid;
 		if (event.shiftKey) {
-			this.actor.useAbility(itemId, {skipPrompt: true});
+			this.actor.system.useAbility(itemUuid, {skipPrompt: true});
 		}
 		else {
-			this.actor.useAbility(itemId);
+			this.actor.system.useAbility(itemUuid);
 		}
 	}
 
 	async _onUsePotion(event) {
 		event.preventDefault();
 
-		const itemId = $(event.currentTarget).data("item-id");
+		const itemId = event.currentTarget.dataset.itemId;
 
 		this.actor.usePotion(itemId);
 	}
@@ -704,7 +704,7 @@ export default class PlayerSheetSD extends ActorSheetSD {
 	async _onToggleLightSource(event) {
 		event.preventDefault();
 
-		const itemId = $(event.currentTarget).data("item-id");
+		const itemId = event.currentTarget.dataset.itemId;
 		const item = this.actor.getEmbeddedDocument("Item", itemId);
 
 		this._toggleLightSource(item);

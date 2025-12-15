@@ -80,7 +80,6 @@ SHADOWDARK.DEFAULTS = {
 		"NPC Attack": "icons/skills/melee/weapons-crossed-swords-yellow.webp",
 		"NPC Feature": "icons/creatures/abilities/dragon-breath-purple.webp",
 		"NPC Special Attack": "icons/magic/death/weapon-sword-skull-purple.webp",
-		"NPC Spell": "icons/magic/symbols/runes-star-magenta.webp",
 		"Patron": "icons/magic/unholy/silhouette-light-fire-blue.webp",
 		"Potion": "icons/consumables/potions/bottle-corked-red.webp",
 		"Property": "icons/sundries/documents/document-torn-diagram-tan.webp",
@@ -561,7 +560,14 @@ SHADOWDARK.TALENT_CLASSES = {
 	patronBoon: "SHADOWDARK.talent.class.patronBoon",
 };
 
+SHADOWDARK.TOKEN_HP_COLORS = {
+	damage: 0xDD0000,
+	healing: 0x00DD00,
+	defeated: 0x303030,
+};
+
 SHADOWDARK.WEAPON_BASE_DAMAGE = {
+	1: "1",
 	d2: "1d2",
 	d4: "1d4",
 	d6: "1d6",
