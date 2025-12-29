@@ -1,3 +1,13 @@
+# v3.6.2
+
+## Bugfixes
+- [#1197] Fixed issue with Ability checks on character sheet
+
+## Chores
+- [#1192] Merge Portuguese (Brazilian) translation updates from Crowdin
+
+---
+
 # v3.6.1
 
 ## Enhancements
@@ -22,6 +32,8 @@
 - [#1183] Take new snapshot of comendium data
 - [#1185] Remove deprecated label parameter from active effects manager
 - [#1186] Update node packages used for build.
+
+**NOTE:** Many thanks to *Brittonlj* for multiple contributions included in this build.
 
 ---
 
